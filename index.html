@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santa Cruz BCycle Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            text-align: center;
+        }
+        header {
+            background-color: #0066cc;
+            color: white;
+            padding: 40px 20px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        header p {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        main {
+            padding: 40px 20px;
+        }
+        .snapshot {
+            max-width: 800px;
+            width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 20px auto;
+        }
+        .dashboard-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .dashboard-link:hover {
+            background-color: #004999;
+        }
+        footer {
+            margin-top: 60px;
+            padding: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Santa Cruz BCycle Dashboard</h1>
+    <p>I connected the publicly available JSON data from the local Santa Cruz BCycle Share to a more comprehensive map app using Dash & Plotly.</p>
+</header>
+
+<main>
+    <!-- Static snapshot image -->
+    <img class="snapshot" src="snapshot.png" alt="Santa Cruz BCycle Dashboard Snapshot">
+
+    <!-- Link to live dashboard -->
+    <br>
+    <a class="dashboard-link" href="https://your-live-dashboard-link.com" target="_blank">
+        Open Live Dashboard
+    </a>
+</main>
+
+<footer>
+    &copy; 2025 Ezra Fleishman
+</footer>
+
+</body>
+</html>
