@@ -23,41 +23,11 @@
       margin: 0;
       font-size: 2em;
     }
-    header p {
-      margin: 10px 0 0;
-      font-size: 1.1em;
-    }
     main {
       padding: 30px 20px;
       max-width: 1200px;
       margin: 0 auto;
       text-align: center;
-    }
-    .snapshot {
-      width: 100%;
-      max-width: 900px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin: 20px auto;
-      display: block;
-    }
-    .dashboard-link {
-      display: inline-block;
-      margin: 20px auto;
-      padding: 12px 24px;
-      background-color: #0066cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .dashboard-link:hover {
-      background-color: #004999;
-    }
-    #live-dashboard {
-      display: none;
-      margin-top: 40px;
     }
     #kpis {
       display: flex;
@@ -73,11 +43,7 @@
       border-radius: 8px;
       min-width: 120px;
     }
-    #map {
-      width: 100%;
-      height: 500px;
-      margin-bottom: 30px;
-    }
+    #map { width: 100%; height: 500px; margin-bottom: 30px; }
     table {
       width: 100%;
       max-width: 900px;
@@ -87,30 +53,12 @@
       border-radius: 8px;
       overflow: hidden;
     }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
-    footer {
-      padding: 20px;
-      text-align: center;
-      font-size: 0.9em;
-      color: #555;
-      background: #eee;
-    }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+    th { background-color: #f0f0f0; }
+    footer { padding: 20px; text-align: center; font-size: 0.9em; color: #555; background: #eee; }
     @media (max-width: 600px) {
-      #kpis {
-        flex-direction: column;
-        gap: 10px;
-      }
-      th, td {
-        font-size: 0.9em;
-        padding: 8px;
-      }
+      #kpis { flex-direction: column; gap: 10px; }
+      th, td { font-size: 0.9em; padding: 8px; }
     }
   </style>
 </head>
@@ -121,18 +69,9 @@
 </header>
 
 <main>
-  <!-- Snapshot -->
-  <img class="snapshot" src="" alt="Santa Cruz BCycle Dashboard Snapshot">
-
-  <!-- Button -->
-  <a class="dashboard-link" id="open-dashboard">Open Live Interactive Dashboard</a>
-
-  <!-- Live Dashboard Container -->
-  <div id="live-dashboard">
-    <div id="kpis"></div>
-    <div id="map"></div>
-    <div id="table-div"></div>
-  </div>
+  <div id="kpis"></div>
+  <div id="map"></div>
+  <div id="table-div"></div>
 </main>
 
 <footer>
@@ -172,64 +111,8 @@ async function fetchBCycleData() {
 }
 
 // ------------------------
-// Generate initial snapshot
+// Render functions
 // ------------------------
-async function generateSnapshot() {
-  const stations = await fetchBCycleData();
-
-  const mapDiv = document.createElement('div');
-  mapDiv.style.display = 'none';
-  document.body.appendChild(mapDiv);
-
-  const latitudes = stations.map(s => s.lat);
-  const longitudes = stations.map(s => s.lon);
-  const texts = stations.map(s => `${s.name}<br>Bikes: ${s.num_bikes_available}<br>Docks: ${s.num_docks_available}`);
-
-  const data = [{
-    type: 'scattermapbox',
-    lat: latitudes,
-    lon: longitudes,
-    mode: 'markers+text',
-    text: stations.map(s => s.num_bikes_available.toString()),
-    textposition: 'top center',
-    hoverinfo: 'text',
-    hovertext: texts,
-    marker: { size: 12, color: 'blue', opacity: 0.8 }
-  }];
-
-  const layout = {
-    mapbox: {
-      style: 'open-street-map',
-      center: { lat: latitudes.reduce((a,b)=>a+b)/latitudes.length,
-                lon: longitudes.reduce((a,b)=>a+b)/longitudes.length },
-      zoom: 13
-    },
-    margin: { t:0, b:0, l:0, r:0 },
-    height: 400,
-    width: Math.min(window.innerWidth*0.9, 900)
-  };
-
-  await Plotly.newPlot(mapDiv, data, layout);
-
-  const imgData = await Plotly.toImage(mapDiv, {format: 'png', height: 400, width: layout.width});
-  document.querySelector('.snapshot').src = imgData;
-  document.body.removeChild(mapDiv);
-}
-
-// Generate snapshot on page load
-generateSnapshot();
-
-// ------------------------
-// Render live dashboard
-// ------------------------
-document.getElementById('open-dashboard').addEventListener('click', () => {
-  const liveDiv = document.getElementById('live-dashboard');
-  liveDiv.style.display = 'block';
-  document.querySelector('.snapshot').style.display = 'none';
-  document.getElementById('open-dashboard').style.display = 'none';
-  renderDashboard();
-});
-
 function renderKPIs(stations) {
   const totalBikes = stations.reduce((sum, s) => sum + s.num_bikes_available, 0);
   const totalDocks = stations.reduce((sum, s) => sum + s.num_docks_available, 0);
@@ -287,6 +170,9 @@ function renderTable(stations) {
   document.getElementById('table-div').innerHTML = html;
 }
 
+// ------------------------
+// Initialize dashboard
+// ------------------------
 async function renderDashboard() {
   const stations = await fetchBCycleData();
   renderKPIs(stations);
@@ -297,8 +183,11 @@ async function renderDashboard() {
     renderKPIs(updatedStations);
     renderMap(updatedStations);
     renderTable(updatedStations);
-  }, 60000);
+  }, 60000); // refresh every minute
 }
+
+// Run dashboard on page load
+renderDashboard();
 </script>
 
 </body>
