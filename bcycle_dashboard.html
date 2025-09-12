@@ -117,17 +117,10 @@
 <body>
 
 <header>
-  <h1>🚲 Santa Cruz BCycle Dashboard 🚲</h1>
-  <p>I connected the publicly available JSON data from the local Santa Cruz BCycle Share to a comprehensive map app using Plotly.js</p>
+  <h1>Santa Cruz BCycle Dashboard</h1>
 </header>
 
 <main>
-  <!-- Snapshot -->
-  <img class="snapshot" src="" alt="Santa Cruz BCycle Dashboard Snapshot">
-
-  <!-- Button -->
-  <a class="dashboard-link" id="open-dashboard">Open Live Interactive Dashboard</a>
-
   <!-- Live Dashboard Container -->
   <div id="live-dashboard">
     <div id="kpis"></div>
@@ -137,7 +130,7 @@
 </main>
 
 <footer>
-  &copy; 2025 Ezra Fleishman
+  &copy; Ezra Fleishman - 2025
 </footer>
 
 <script>
@@ -171,55 +164,7 @@ async function fetchBCycleData() {
     return [];
   }
 }
-
-// ------------------------
-// Generate initial snapshot
-// ------------------------
-async function generateSnapshot() {
-  const stations = await fetchBCycleData();
-
-  const mapDiv = document.createElement('div');
-  mapDiv.style.display = 'none';
-  document.body.appendChild(mapDiv);
-
-  const latitudes = stations.map(s => s.lat);
-  const longitudes = stations.map(s => s.lon);
-  const texts = stations.map(s => `${s.name}<br>Bikes: ${s.num_bikes_available}<br>Docks: ${s.num_docks_available}`);
-
-  const data = [{
-    type: 'scattermapbox',
-    lat: latitudes,
-    lon: longitudes,
-    mode: 'markers+text',
-    text: stations.map(s => s.num_bikes_available.toString()),
-    textposition: 'top center',
-    hoverinfo: 'text',
-    hovertext: texts,
-    marker: { size: 12, color: 'blue', opacity: 0.8 }
-  }];
-
-  const layout = {
-    mapbox: {
-      style: 'open-street-map',
-      center: { lat: latitudes.reduce((a,b)=>a+b)/latitudes.length,
-                lon: longitudes.reduce((a,b)=>a+b)/longitudes.length },
-      zoom: 13
-    },
-    margin: { t:0, b:0, l:0, r:0 },
-    height: 400,
-    width: Math.min(window.innerWidth*0.9, 900)
-  };
-
-  await Plotly.newPlot(mapDiv, data, layout);
-
-  const imgData = await Plotly.toImage(mapDiv, {format: 'png', height: 400, width: layout.width});
-  document.querySelector('.snapshot').src = imgData;
-  document.body.removeChild(mapDiv);
-}
-
-// Generate snapshot on page load
-generateSnapshot();
-
+  
 // ------------------------
 // Render live dashboard
 // ------------------------
