@@ -140,6 +140,22 @@ function renderKPIs(stations) {
 
   const kpiDiv = document.getElementById('kpis');
   kpiDiv.innerHTML = `
+
+  <!-- Home Button -->
+    <div style="position: fixed; top: 10px; left: 10px;">
+      <a href="index.html" style="
+        display: inline-block;
+        padding: 8px 12px;
+        background-color: #007BFF;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+      ">Home</a>
+    </div>
+    
+    <div style="margin-top: 50px;">
+
     <div>Total Bikes: ${totalBikes}</div>
     <div>Total Docks: ${totalDocks}</div>
     
