@@ -141,8 +141,10 @@ function renderKPIs(stations) {
   kpiDiv.innerHTML = `
     <div>Total Bikes: ${totalBikes}</div>
     <div>Total Docks: ${totalDocks}</div>
-    <div>Empty Stations: ${emptyStations}</div>
-    <div>
+    <div style="color:green;">
+      Empty Stations: ${emptyStations.length}
+      ${emptyStations.length > 0 ? `<br><small>${emptyStations.map(s => s.name).join(", ")}</small>` : ""}
+    <div style="color:red;">
       Full Stations: ${fullStations.length}
       ${fullStations.length > 0 
         ? `<br><small>${fullStations.map(s => s.name).join(", ")}</small>` 
