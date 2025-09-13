@@ -5,19 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EzraFleishman.GitHub.io/</title>
   <style>
-    body { font-family: Aptos, sans-serif; text-align: left; padding: 50px; background: #f7f7f7; }
+    body { font-family: Aptos, sans-serif; 
+          text-align: left; 
+          padding: 50px; 
+          background: #f7f7f7; }
     h1 { font-size: 2.5em; }
     a { display: inline-block; margin: 20px; padding: 12px 24px; background: #0066cc; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+
+    /* Normal-text links */
+    a.normal-link {
+  display: inline;       /* inline so it behaves like regular text */
+  margin: 0;             /* remove spacing from button style */
+  padding: 0;            /* remove padding */
+  background: none;      /* remove background color */
+  color: blue;           /* standard link color */
+  text-decoration: underline; /* classic link underline */
+  font-weight: normal;   /* normal font weight */
+}
     a:hover { background: #004999; }
   </style>
 </head>
 <body>
 
 <h1>Welcome to Ezra Fleishman's GitHub Portfolio</h1>
-<p><b>Check out my projects and dashboards below:</b></p>  
-
+<p>I'm a data enthusiast passionate about creating interactive visualizations. Explore my projects below!</p>
 <p>
-  I used data from Santa Cruz BCycle to create a more comprehensive dashboard with <a href="https://plotly.com/" target=_blank>Plotly. </a>
+  I used data from Santa Cruz BCycle to create a more comprehensive dashboard with 
+  <a href="https://plotly.com/" target="_blank" class="normal-link">Plotly</a>
 </p>
 <p>This data refreshes every 60 seconds, and can be viewed on a desktop or mobile browser: </p>
 <a href="bcycle_dashboard.html">Santa Cruz BCycle Dashboard</a>
