@@ -133,24 +133,44 @@ async function fetchBCycleData() {
 function renderKPIs(stations) {
   const totalBikes = stations.reduce((sum, s) => sum + s.num_bikes_available, 0);
   const totalDocks = stations.reduce((sum, s) => sum + s.num_docks_available, 0);
-  const emptyStations = stations.filter(s => s.num_bikes_available === 0).length;
-  const fullStations = stations.filter(s => s.num_docks_available === 0).length;
+
+  const emptyStations = stations.filter(s => s.num_bikes_available === 0);
+  const fullStations = stations.filter(s => s.num_docks_available === 0);
   const onlineStations = stations.length;
 
   const kpiDiv = document.getElementById('kpis');
   kpiDiv.innerHTML = `
     <div>Total Bikes: ${totalBikes}</div>
     <div>Total Docks: ${totalDocks}</div>
+    
     <div style="color:green;">
       Empty Stations: ${emptyStations.length}
-      ${emptyStations.length > 0 ? `<br><small>${emptyStations.map(s => s.name).join(", ")}</small>` : ""}
-      </div>
+      ${
+        emptyStations.length > 0
+          ? `
+            <details>
+              <summary>View Empty Stations</summary>
+              <ul>${emptyStations.map(s => `<li>${s.name}</li>`).join("")}</ul>
+            </details>
+          `
+          : ""
+      }
+    </div>
+    
     <div style="color:red;">
       Full Stations: ${fullStations.length}
-      ${fullStations.length > 0 
-        ? `<br><small>${fullStations.map(s => s.name).join(", ")}</small>` 
-        : ""}
+      ${
+        fullStations.length > 0
+          ? `
+            <details>
+              <summary>View Full Stations</summary>
+              <ul>${fullStations.map(s => `<li>${s.name}</li>`).join("")}</ul>
+            </details>
+          `
+          : ""
+      }
     </div>
+    
     <div>Stations Online: ${onlineStations}</div>
   `;
 }
