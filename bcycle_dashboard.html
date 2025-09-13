@@ -134,7 +134,7 @@ function renderKPIs(stations) {
   const totalBikes = stations.reduce((sum, s) => sum + s.num_bikes_available, 0);
   const totalDocks = stations.reduce((sum, s) => sum + s.num_docks_available, 0);
   const emptyStations = stations.filter(s => s.num_bikes_available === 0).length;
-  const fullStations = stations.filter(s => s.num_docks_available === 0);
+  const fullStations = stations.filter(s => s.num_docks_available === 0).length;
   const onlineStations = stations.length;
 
   const kpiDiv = document.getElementById('kpis');
@@ -144,6 +144,7 @@ function renderKPIs(stations) {
     <div style="color:green;">
       Empty Stations: ${emptyStations.length}
       ${emptyStations.length > 0 ? `<br><small>${emptyStations.map(s => s.name).join(", ")}</small>` : ""}
+      </div>
     <div style="color:red;">
       Full Stations: ${fullStations.length}
       ${fullStations.length > 0 
