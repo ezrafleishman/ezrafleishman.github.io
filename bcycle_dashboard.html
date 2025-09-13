@@ -7,7 +7,7 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
     body {
-      font-family: Aptos, sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background: #f7f7f7;
@@ -55,6 +55,17 @@
     }
     th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
     th { background-color: #f0f0f0; }
+    button {
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background-color: #004999; }
     footer { padding: 20px; text-align: center; font-size: 0.9em; color: #555; background: #eee; }
     @media (max-width: 600px) {
       #kpis { flex-direction: column; gap: 10px; }
@@ -71,6 +82,10 @@
 <main>
   <div id="kpis"></div>
   <div id="map"></div>
+
+  <!-- Download CSV button -->
+  <button id="download-csv">Download CSV</button>
+
   <div id="table-div"></div>
 </main>
 
@@ -79,6 +94,8 @@
 </footer>
 
 <script>
+let currentStations = [];
+
 // ------------------------
 // Fetch BCycle data
 // ------------------------
@@ -171,18 +188,42 @@ function renderTable(stations) {
 }
 
 // ------------------------
+// Download CSV
+// ------------------------
+function downloadCSV(stations) {
+  const header = ['Station Name', 'Bikes Available', 'Docks Available'];
+  const rows = stations.map(s => [s.name, s.num_bikes_available, s.num_docks_available]);
+  let csvContent = "data:text/csv;charset=utf-8," 
+      + header.join(",") + "\n" 
+      + rows.map(e => e.join(",")).join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "santa_cruz_bcycle.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Attach button
+document.getElementById('download-csv').addEventListener('click', () => {
+  downloadCSV(currentStations);
+});
+
+// ------------------------
 // Initialize dashboard
 // ------------------------
 async function renderDashboard() {
-  const stations = await fetchBCycleData();
-  renderKPIs(stations);
-  renderMap(stations);
-  renderTable(stations);
+  currentStations = await fetchBCycleData();
+  renderKPIs(currentStations);
+  renderMap(currentStations);
+  renderTable(currentStations);
+
   setInterval(async () => {
-    const updatedStations = await fetchBCycleData();
-    renderKPIs(updatedStations);
-    renderMap(updatedStations);
-    renderTable(updatedStations);
+    currentStations = await fetchBCycleData();
+    renderKPIs(currentStations);
+    renderMap(currentStations);
+    renderTable(currentStations);
   }, 60000); // refresh every minute
 }
 
