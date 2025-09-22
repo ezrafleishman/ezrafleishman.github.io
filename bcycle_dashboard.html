@@ -43,6 +43,26 @@
       border-radius: 8px;
       min-width: 120px;
     }
+    #kpis button {
+      background: white;
+      color: black;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      min-width: 150px;
+    }
+    #kpis button:hover {
+      background: #f0f0f0;
+    }
+    #kpis button.empty {
+      color: green;
+    }
+    #kpis button.full {
+      color: red;
+    }
     #map { width: 100%; height: 500px; margin-bottom: 30px; }
     table {
       width: 100%;
@@ -131,18 +151,18 @@ async function fetchBCycleData() {
 // Render functions
 // ------------------------
 function renderKPIs(stations) {
-  const totalBikes = stations.reduce((sum, s) => sum + s.num_bikes_available, 0);
-  const totalDocks = stations.reduce((sum, s) => sum + s.num_docks_available, 0);
+  const totalBikes = stations.reduce((sum, s) => sum + (s.num_bikes_available || 0), 0);
+  const totalDocks = stations.reduce((sum, s) => sum + (s.num_docks_available || 0), 0);
   const emptyStations = stations.filter(s => s.num_bikes_available === 0);
   const fullStations = stations.filter(s => s.num_docks_available === 0);
-  const onlineStations = stations.length;
+  const onlineStations = stations.length || "N/A";
 
   const kpiDiv = document.getElementById('kpis');
   kpiDiv.innerHTML = `
-    <button>Total Bikes: ${totalBikes}</button>
-    <button>Total Docks: ${totalDocks}</button>
-    <button>
-      Empty Stations: ${emptyStations.length}
+    <button>Total Bikes: ${totalBikes || "N/A"}</button>
+    <button>Total Docks: ${totalDocks || "N/A"}</button>
+    <button class="empty">
+      Empty Stations: ${emptyStations.length || "N/A"}
       ${
         emptyStations.length > 0
           ? `
@@ -154,8 +174,8 @@ function renderKPIs(stations) {
           : ""
       }
     </button>
-    <button>
-      Full Stations: ${fullStations.length}
+    <button class="full">
+      Full Stations: ${fullStations.length || "N/A"}
       ${
         fullStations.length > 0
           ? `
