@@ -91,6 +91,27 @@
       #kpis { flex-direction: column; gap: 10px; }
       th, td { font-size: 0.9em; padding: 8px; }
     }
+
+    #home-button {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+    }
+
+    #home-button a {
+      display: inline-block;
+      padding: 8px 12px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    #home-button a:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +119,11 @@
 <header>
   <h1>Santa Cruz BCycle Dashboard</h1>
 </header>
+
+<!-- Home Button -->
+<div id="home-button">
+  <a href="index.html">Home</a>
+</div>
 
 <main>
   <div id="kpis"></div>
