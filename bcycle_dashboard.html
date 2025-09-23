@@ -32,7 +32,7 @@
   <div id="map"></div>
 
   <!-- Download CSV button -->
-  <button id="download-csv">Download CSV</button>
+  <button id="download-csv" onclick="downloadCSV(currentStations)">Download CSV</button>
 
   <div id="table-div"></div>
 </main>
@@ -182,12 +182,14 @@ function downloadCSV(stations) {
 // ------------------------
 async function renderDashboard() {
   currentStations = await fetchBCycleData();
+  console.log("Current Stations Data:", currentStations); // Debugging line
   renderKPIs(currentStations);
   renderMap(currentStations);
   renderTable(currentStations);
 
   setInterval(async () => {
     currentStations = await fetchBCycleData();
+    console.log("Updated Stations Data:", currentStations); // Debugging line
     renderKPIs(currentStations);
     renderMap(currentStations);
     renderTable(currentStations);
