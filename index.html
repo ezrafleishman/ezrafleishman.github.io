@@ -52,6 +52,21 @@
       background: #c13c1a;
     }
 
+    .tableau-button {
+      display: inline-block;
+      margin: 20px;
+      padding: 12px 24px;
+      background: #dc2626; /* Red color for Tableau button */
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .tableau-button:hover {
+      background: #b91c1c;
+    }
+
   </style>
 </head>
 <body>
@@ -62,15 +77,12 @@
 <h1>Welcome to Ezra Fleishman's GitHub Portfolio</h1>
 <p>I'm a data enthusiast passionate about creating interactive visualizations. Explore my projects below!</p>
 <br>
-  <p>
-  I used data from Santa Cruz BCycle to create a more comprehensive dashboard with 
-  <a href="https://plotly.com/" target="_blank" class="normal-link">Plotly</a>
-</p>
-<p>This data refreshes <b>every 60 seconds,</b> and can be viewed on a desktop or mobile browser: </p>
+<p>I used data from Santa Cruz BCycle to create a more comprehensive dashboard with <a href="https://plotly.com/" target="_blank" class="normal-link">Plotly</a>. This data refreshes <b>every 60 seconds,</b> and can be viewed on a desktop or mobile browser: Visit the link below to view the JSON data source: <a href="https://gbfs.bcycle.com/bcycle_santacruz/gbfs.json" target="_blank" class="normal-link">bcycle_santacruz/gbfs.json</a></p>
+
 <a href="bcycle_dashboard.html">Santa Cruz BCycle Dashboard</a>
- 
-</p>Visit the link below to view the JSON data source:</p>
-  <a href="https://gbfs.bcycle.com/bcycle_santacruz/gbfs.json" target=_blank">bcycle_santacruz/gbfs.json</a>
+
+<p>Visit the link below to view my Tableau dashboard created using global CO2 emissions data from 1965 - 2011:</p>
+<a href="ezrafleishman.github.io/tableau_co2_map.html" class="tableau-button">Tableau CO2 Emissions Dashboard</a>
 
 </body>
 </html>
