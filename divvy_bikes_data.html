@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global CO2 Emissions from 1965 - 2011</title>
+    <title>Divvy-Bikes Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,18 +39,19 @@
             padding: 20px;
         }
         h1 {
-            text-align: left;
+            text-align: left; 
             color: white;
-            margin: 0;
-            padding-top: 10px;
+            margin: 30px 0 0 0;
+            padding: 10px 20px; 
+            font-size: 2em;
         }
         .welcome-text {
-            text-align: left;
+            text-align: left; 
             font-size: 1.1em;
             line-height: 1.6;
             color: #555;
             max-width: 730px;
-            margin: 30px 0;
+            margin: 30px 20px; 
             padding: 20px;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             border-radius: 12px;
@@ -74,14 +75,53 @@
             align-items: center;
             margin: 20px 0;
         }
+        .tableauPlaceholder {
+            margin: 20px 0;             <div class="header">
+                <a href="https://ezrafleishman.github.io/" class="home-button">Home</a>
+                <h1>
+                    Divvy-Bikes Dashboard
+                </h1>
+            </div>
+            
+            <p class="welcome-text">
+                This dashboard was created using data from Divvy Bikes in Chicago (Sep 2025). The data repository tracks monthly bikeshare usage. You can access it at the following links:
+                <br>
+                <a href="https://divvy-tripdata.s3.amazonaws.com/index.html" target="_blank">Divvy Trip Data</a>
+                <br>
+                <a href="https://divvybikes.com/system-data" target="_blank">Divvy System Data</a>
+            </p>
+            
+            <div class='tableauPlaceholder' id='viz1760044143585' style='position: relative'>
+                <noscript>
+                    <a href='#'>
+                        <img alt='Dashboard 1 ' src='https://public.tableau.com/static/images/Di/Divvy-Bikes/Dashboard1/1_rss.png' style='border: none' />
+                    </a>
+                </noscript>
+                <object class='tableauViz' style='display:none;'>
+                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                    <param name='embed_code_version' value='3' />
+                    <param name='site_root' value='' />
+                    <param name='name' value='Divvy-Bikes/Dashboard1' />
+                    <param name='tabs' value='no' />
+                    <param name='toolbar' value='yes' />
+                    <param name='static_image' value='https://public.tableau.com/static/images/Di/Divvy-Bikes/Dashboard1/1.png' />
+                    <param name='animate_transition' value='yes' />
+                    <param name='display_static_image' value='yes' />
+                    <param name='display_spinner' value='yes' />
+                    <param name='display_overlay' value='yes' />
+                    <param name='display_count' value='yes' />
+                    <param name='language' value='en-US' />
+                    <param name='filter' value='publish=yes' />
+                </object>
+            </div>
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <a href="https://ezrafleishman.github.io/" class="home-button">Home</a>
         <h1>
-            <pre>
-        Divvy-Bikes Data Dashboard</pre>
+    Divvy-Bikes Dashboard
         </h1>
     </div>
 
