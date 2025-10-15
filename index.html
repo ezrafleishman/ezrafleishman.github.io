@@ -272,8 +272,9 @@
       background: #004999;
     }
 
+    /*
     .dashboard-button.bcycle {
-      background: #ff5733;
+      background: #0066cc;
     }
 
     .dashboard-button.bcycle:hover {
@@ -288,7 +289,70 @@
       background: #b91c1c;
     }
 
-    /* Responsive Design */
+    /* Freelance Section with Image */
+    .freelance-content {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .freelance-text {
+      flex: 1;
+    }
+
+    .freelance-image {
+      width: 300px;        /* controls image width */
+      margin: 0 auto;      /* center the block */
+      text-align: center;   /* center image and text */
+    }
+
+.freelance-image img {
+  width: 100%;         /* fills container width */
+  border-radius: 12px;
+  display: block;
+  vertical-align: bottom;    /* ensures it behaves like a block for centering */
+}
+.image-credit {
+  display: block;         /* ensures text is on its own line */
+  margin: 0;              /* remove default margin */
+  padding: 0;             /* remove default padding */
+  font-size: 0.85rem;
+}
+
+.image-credit a {
+  color: #555;
+  text-decoration: underline;
+}
+.image-credit a:hover {
+  text-decoration: underline;
+}
+
+.site-footer {
+  width: 100%;
+  text-align: center;
+  padding: 15px 0;
+  background: #f7f7f7;      /* matches page background */
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 40px;         /* some spacing from main content */
+}
+
+.site-footer a {
+  color: #555;
+  text-decoration: underline;
+}
+
+.site-footer a:hover {
+  color: #0066cc;
+}
+
+.site-footer p {
+  margin: 5px 0;            /* reduces spacing between lines */
+}
+
+/*Page Styling End*/
+    
+/* Responsive Design */
     @media (max-width: 768px) {
       nav {
         padding: 0 20px;
@@ -341,6 +405,10 @@
         width: 100%;
         text-align: center;
       }
+
+      .freelance-content {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -361,7 +429,7 @@
       <img src="linkedin-headshot.jpeg" class="profile-photo">
       <div class="profile-content">
         <h1>Ezra Fleishman</h1>
-        <p class="tagline">Data Analytics</p>
+        <p class="tagline">Data Analyst</p>
         <p class="about-text">
           Welcome to my portfolio! I am a data enthusiast, passionate about transforming complex datasets into insights and visualizations.
         </p>
@@ -397,7 +465,27 @@
 
     <!-- Contact Section -->
     <div class="contact-section" id="contact">
-      <h2>Contact:</h2>
+      <h2>Freelance & Contact:</h2>
+      <div class="freelance-content">
+        <div class="freelance-text">
+          <p class="about-text">
+            Looking for help analyzing large datasets or building interactive dashboards? I am now providing freelance support for projects involving:<br><br>
+            - Marketing, campaign, and sales data analysis<br>
+            - Analyzing large datasets in Excel or Google Sheets<br>
+            - Tableau dashboard design and visualization<br>
+            - Presentation and reporting of key insights<br><br>
+            
+            Please feel free to reach out with any questions - looking forward to hearing from you!<br>
+          </p>
+        </div>
+        <br>
+        <!-- Freepik Image with Attribution -->
+        <div class="freelance-image">
+          <img src="dashboard-img.jpg" alt="dashboard image">
+        </div>        
+      </div>
+      <br>
+
       <!---email-->
       <div class="contact-method">
         <div class="contact-icon">
@@ -435,10 +523,21 @@
           <div class="contact-info">
             <h3>Phone</h3>
             <a href="tel:4133203139">(413) 320-3139</a>
+          </div>
+        </div>
       </div>
     </div>
     
   </div>
+
+  <footer class="site-footer">
+    <p class="copyright-footer">
+      &copy; Ezra Fleishman 2025
+    </p>
+    <p class="image-credit-footer">
+      Image by <a href="https://www.freepik.com/free-vector/data-analyst-oversees-governs-income-expenses-with-magnifier-financial-management-system-finance-software-it-management-tool-concept_11667717.htm" target="_blank">Freepik</a>
+    </p>
+  </footer>
 
 </body>
 </html>
