@@ -310,7 +310,6 @@
   width: 100%;         /* fills container width */
   border-radius: 12px;
   display: block;
-  vertical-align: bottom;    /* ensures it behaves like a block for centering */
 }
 .image-credit {
   display: block;         /* ensures text is on its own line */
@@ -440,12 +439,12 @@
     <div class="projects-section" id="dashboards">
       <h2>Interactive Dashboards</h2>
       
-      <h3 style="color: #333; margin-top: 30px; margin-bottom: 15px;">Real-Time BCycle Dashboard</h3>
+      <h3 style="color: #333; margin-top: 30px; margin-bottom: 15px;">Santa Cruz BCycle Dashboard</h3>
       <p class="project-intro">
-        I used data from Santa Cruz BCycle to create a comprehensive dashboard with 
+        I connected JSON data from Santa Cruz bikeshare to generate a comprehensive dashboard with 
         <a href="https://plotly.com/" target="_blank" class="normal-link">Plotly</a>. 
-        This data refreshes <b>every 60 seconds</b> and can be viewed on desktop or mobile browsers. 
-        Visit the link below to view the JSON data source: 
+        This data refreshes every 60 seconds. 
+        Data source: 
         <a href="https://gbfs.bcycle.com/bcycle_santacruz/gbfs.json" target="_blank" class="normal-link">bcycle_santacruz/gbfs.json</a>
       </p>
       <div class="dashboard-buttons">
@@ -454,12 +453,19 @@
 
       <h3 style="color: #333; margin-top: 40px; margin-bottom: 15px;">Tableau Visualizations</h3>
       <p class="project-intro">
-        Explore my <b>Tableau</b> dashboards created using publicly available datasets, 
-        showcasing insights on global emissions and urban bike-sharing patterns.
+        Explore my dashboards that use public datasets to visualize global emissions and Chicago bikeshare data:
       </p>
       <div class="dashboard-buttons">
         <a href="tableau_co2_map.html" class="dashboard-button tableau">Global CO2 Emissions Dashboard</a>
         <a href="divvy_bikes_data.html" class="dashboard-button tableau">Divvy Bikes Chicago Dashboard</a>
+      </div>
+
+      <h3 style="color: #333; margin-top: 40px; margin-bottom: 15px;">Excel Analysis</h3>
+      <p class="project-intro">
+        View pivot tables and charts used to analyze data in Excel. Source: <a href="https://divvy-tripdata.s3.amazonaws.com/index.html" target="_blank" class="normal-link">divvy-tripdata:</a>      
+      </p>
+      <div class="dashboard-buttons">
+        <a href="https://ezrafleishman.github.io/divvy_table_analysis.html" class="dashboard-button tableau">Divvy Bikes-Excel Analysis</a>
       </div>
     </div>
 
