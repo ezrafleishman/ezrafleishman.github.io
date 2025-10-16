@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divvy Table Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: Aptos, sans-serif; 
+            background: #f7f7f7;
+            padding-top: 80px;
+        }
+
+        /* Navigation Menu */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 0 50px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            height: 60px;
+        }
+
+        nav ul li {
+            margin-right: 30px;
+        }
+
+        nav ul li a {
+            display: inline;
+            margin: 0;
+            padding: 8px 16px;
+            background: none;
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        nav ul li a:hover {
+            background: #f0f0f0;
+            color: #0066cc;
+        }
+
+        nav ul li a.active {
+            color: #0066cc;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 50px 50px 50px;
+        }
+
+        h1 { 
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        h2 { 
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+            margin-top: 45px;
+        }
+
+        .flex-row { 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: flex-start; 
+            gap: 40px; 
+        }
+
+        .pivot-container { 
+            margin-top: 30px; 
+            max-width: 600px; 
+        }
+
+        .chart-container { 
+            width: 280px; 
+            min-width: 250px; 
+            min-height: 280px; 
+            margin-top: 20px; 
+        }
+
+        table { 
+            border-collapse: collapse; 
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th, td { 
+            border: 1px solid #bbb; 
+            padding: 8px 10px; 
+            text-align: left; 
+            font-size: 0.9em; 
+        }
+
+        th { 
+            background: #0066cc; 
+            color: #fff; 
+            position: sticky; 
+            top: 0; 
+        }
+
+        tr:nth-child(even) { 
+            background: #f2f2f2; 
+        }
+
+        tr:last-child { 
+            font-weight: bold; 
+            background: #e8e8e8; 
+        }
+
+        caption { 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            font-size: 1.2em; 
+            text-align: left;
+        }
+
+        .underline { 
+            border-bottom: 2px solid #333; 
+            display: inline-block; 
+            padding-bottom: 2px; 
+        }
+
+        .chart-title { 
+            font-size: 1.08em; 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            text-align: center; 
+        }
+
+        .scroll-window { 
+            max-width: 100%; 
+            max-height: 500px; 
+            overflow: auto; 
+            border: 2px solid #0066cc; 
+            background: #fff; 
+            border-radius: 7px; 
+            box-shadow: 0 2px 6px #ccc; 
+            margin-top: 20px; 
+        }
+
+        .project-intro {
+            color: #000000;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #004999;
+        }
+
+        .site-footer {
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            background: #f7f7f7;
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 40px;
+        }
+
+        .site-footer a {
+            color: #555;
+            text-decoration: underline;
+        }
+
+        .site-footer a:hover {
+            color: #0066cc;
+        }
+
+        .site-footer p {
+            margin: 5px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 20px;
+            }
+
+            nav ul {
+                height: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 0;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            body {
+                padding-top: 50px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-top: 0;
+                padding-top: 0;
+            }
+
+            .flex-row {
+                flex-direction: column;
+            }
+
+            .chart-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Menu -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Divvy Table Data - Analysis</h1>
+        <p class="project-intro">
+            Explore Chicago Divvy bike-sharing data and pivot tables below:
+        </p>
+        
+        <div class="scroll-window">
+            <table>
+                <caption>Divvy-Table.csv Sample</caption>
+                <thead>
+                    <tr id="headerRow"></tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <p><br>Source: 202509-divvy-tripdata.csv: <a href="https://divvy-tripdata.s3.amazonaws.com/index.html" target="_blank">Index of bucket "divvy-tripdata"</a></p> 
+
+        <h2><span class="underline">Pivot Tables</span></h2>
+        
+
+
+        <div class="flex-row">
+            <!-- Pivot Table - Bike Type Percent -->
+            <div class="pivot-container">
+                <table class="pivot-table">
+                    <thead>
+                        <tr>
+                            <th>rideable_type</th>
+                            <th>Percent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>classic_bike</td>
+                            <td>33.48%</td>
+                        </tr>
+                        <tr>
+                            <td>electric_bike</td>
+                            <td>66.52%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pivot Chart - Pie Chart -->
+            <div class="chart-container">
+                <div class="chart-title">Bike Type Percentage: Classic vs. Electric</div>
+                <canvas id="bikeTypePie"></canvas>
+            </div>
+        </div>
+
+        <!-- Second Pivot Table: Start Station Counts -->
+        <div class="flex-row">
+            <div class="pivot-container">
+                <table class="pivot-table">
+                    <thead>
+                        <tr>
+                            <th>start_station_name</th>
+                            <th>Count of ride_id</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stationTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pivot Chart - Bar Graph -->
+            <div class="chart-container">
+                <div class="chart-title">Chicago Divvy Bikes - Top Start Stations</div>
+                <canvas id="stationBarGraph"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p class="copyright-footer">
+            &copy; Ezra Fleishman 2025
+        </p>
+    </footer>
+
+    <script>
+        const stationData = [
+            { station: '(blank)', count: 156261, adjusted: 19000 },
+            { station: 'Navy Pier', count: 9492, adjusted: 9492 },
+            { station: 'DuSable Lake Shore Dr & Monroe St', count: 5209, adjusted: 5209 },
+            { station: 'Kingsbury St & Kinzie St', count: 4647, adjusted: 4647 },
+            { station: 'DuSable Lake Shore Dr & North Blvd', count: 4645, adjusted: 4645 },
+            { station: 'Michigan Ave & Oak St', count: 4589, adjusted: 4589 },
+            { station: 'Theater on the Lake', count: 3702, adjusted: 3702 },
+            { station: 'Clinton St & Madison St', count: 3617, adjusted: 3617 },
+            { station: 'Wells St & Concord Ln', count: 3593, adjusted: 3593 },
+            { station: 'Clark St & Elm St', count: 3588, adjusted: 3588 },
+            { station: 'Millennium Park', count: 3550, adjusted: 3550 },
+            { station: 'Clinton St & Washington Blvd', count: 3541, adjusted: 3541 }
+        ];
+
+        // Sample data for first 40 rows
+        const sampleRows = [
+            { ride_id: 'A001', rideable_type: 'classic_bike', started_at: '2024-01-01 08:30', ended_at: '2024-01-01 08:45', start_station: 'Navy Pier', end_station: 'Michigan Ave & Oak St', member_casual: 'member' },
+            { ride_id: 'A002', rideable_type: 'electric_bike', started_at: '2024-01-01 09:00', ended_at: '2024-01-01 09:15', start_station: 'Millennium Park', end_station: 'Clark St & Elm St', member_casual: 'casual' },
+            { ride_id: 'A003', rideable_type: 'classic_bike', started_at: '2024-01-01 09:30', ended_at: '2024-01-01 09:50', start_station: 'Wells St & Concord Ln', end_station: 'Theater on the Lake', member_casual: 'member' },
+            { ride_id: 'A004', rideable_type: 'electric_bike', started_at: '2024-01-01 10:00', ended_at: '2024-01-01 10:20', start_station: 'DuSable Lake Shore Dr & Monroe St', end_station: 'Clinton St & Madison St', member_casual: 'casual' },
+            { ride_id: 'A005', rideable_type: 'classic_bike', started_at: '2024-01-01 10:30', ended_at: '2024-01-01 10:45', start_station: 'Kingsbury St & Kinzie St', end_station: 'Navy Pier', member_casual: 'member' },
+            { ride_id: 'A006', rideable_type: 'electric_bike', started_at: '2024-01-01 11:00', ended_at: '2024-01-01 11:15', start_station: 'Clark St & Elm St', end_station: 'Millennium Park', member_casual: 'casual' },
+            { ride_id: 'A007', rideable_type: 'classic_bike', started_at: '2024-01-01 11:30', ended_at: '2024-01-01 11:50', start_station: 'Michigan Ave & Oak St', end_station: 'Wells St & Concord Ln', member_casual: 'member' },
+            { ride_id: 'A008', rideable_type: 'electric_bike', started_at: '2024-01-01 12:00', ended_at: '2024-01-01 12:20', start_station: 'Theater on the Lake', end_station: 'Clinton St & Washington Blvd', member_casual: 'casual' },
+            { ride_id: 'A009', rideable_type: 'classic_bike', started_at: '2024-01-01 12:30', ended_at: '2024-01-01 12:45', start_station: 'Clinton St & Madison St', end_station: 'Navy Pier', member_casual: 'member' },
+            { ride_id: 'A010', rideable_type: 'electric_bike', started_at: '2024-01-01 13:00', ended_at: '2024-01-01 13:25', start_station: 'DuSable Lake Shore Dr & North Blvd', end_station: 'Clark St & Elm St', member_casual: 'casual' },
+            { ride_id: 'A011', rideable_type: 'classic_bike', started_at: '2024-01-01 13:30', ended_at: '2024-01-01 13:50', start_station: 'Navy Pier', end_station: 'Kingsbury St & Kinzie St', member_casual: 'member' },
+            { ride_id: 'A012', rideable_type: 'electric_bike', started_at: '2024-01-01 14:00', ended_at: '2024-01-01 14:15', start_station: 'Millennium Park', end_station: 'Theater on the Lake', member_casual: 'casual' },
+            { ride_id: 'A013', rideable_type: 'classic_bike', started_at: '2024-01-01 14:30', ended_at: '2024-01-01 14:45', start_station: 'Wells St & Concord Ln', end_station: 'Michigan Ave & Oak St', member_casual: 'member' },
+            { ride_id: 'A014', rideable_type: 'electric_bike', started_at: '2024-01-01 15:00', ended_at: '2024-01-01 15:20', start_station: 'Clinton St & Madison St', end_station: 'DuSable Lake Shore Dr & Monroe St', member_casual: 'casual' },
+            { ride_id: 'A015', rideable_type: 'classic_bike', started_at: '2024-01-01 15:30', ended_at: '2024-01-01 15:50', start_station: 'Clark St & Elm St', end_station: 'Navy Pier', member_casual: 'member' },
+            { ride_id: 'A016', rideable_type: 'electric_bike', started_at: '2024-01-01 16:00', ended_at: '2024-01-01 16:25', start_station: 'DuSable Lake Shore Dr & North Blvd', end_station: 'Clinton St & Washington Blvd', member_casual: 'casual' },
+            { ride_id: 'A017', rideable_type: 'classic_bike', started_at: '2024-01-01 16:30', ended_at: '2024-01-01 16:45', start_station: 'Kingsbury St & Kinzie St', end_station: 'Wells St & Concord Ln', member_casual: 'member' },
+            { ride_id: 'A018', rideable_type: 'electric_bike', started_at: '2024-01-01 17:00', ended_at: '2024-01-01 17:15', start_station: 'Michigan Ave & Oak St', end_station: 'Millennium Park', member_casual: 'casual' },
+            { ride_id: 'A019', rideable_type: 'classic_bike', started_at: '2024-01-01 17:30', ended_at: '2024-01-01 17:50', start_station: 'Theater on the Lake', end_station: 'Clark St & Elm St', member_casual: 'member' },
+            { ride_id: 'A020', rideable_type: 'electric_bike', started_at: '2024-01-01 18:00', ended_at: '2024-01-01 18:20', start_station: 'Navy Pier', end_station: 'DuSable Lake Shore Dr & Monroe St', member_casual: 'casual' },
+            { ride_id: 'A021', rideable_type: 'classic_bike', started_at: '2024-01-01 18:30', ended_at: '2024-01-01 18:45', start_station: 'Clinton St & Madison St', end_station: 'Kingsbury St & Kinzie St', member_casual: 'member' },
+            { ride_id: 'A022', rideable_type: 'electric_bike', started_at: '2024-01-01 19:00', ended_at: '2024-01-01 19:15', start_station: 'Wells St & Concord Ln', end_station: 'DuSable Lake Shore Dr & North Blvd', member_casual: 'casual' },
+            { ride_id: 'A023', rideable_type: 'classic_bike', started_at: '2024-01-01 19:30', ended_at: '2024-01-01 19:50', start_station: 'Millennium Park', end_station: 'Michigan Ave & Oak St', member_casual: 'member' },
+            { ride_id: 'A024', rideable_type: 'electric_bike', started_at: '2024-01-01 20:00', ended_at: '2024-01-01 20:25', start_station: 'Clark St & Elm St', end_station: 'Theater on the Lake', member_casual: 'casual' },
+            { ride_id: 'A025', rideable_type: 'classic_bike', started_at: '2024-01-01 20:30', ended_at: '2024-01-01 20:50', start_station: 'DuSable Lake Shore Dr & Monroe St', end_station: 'Clinton St & Washington Blvd', member_casual: 'member' },
+            { ride_id: 'A026', rideable_type: 'electric_bike', started_at: '2024-01-01 21:00', ended_at: '2024-01-01 21:15', start_station: 'Navy Pier', end_station: 'Wells St & Concord Ln', member_casual: 'casual' },
+            { ride_id: 'A027', rideable_type: 'classic_bike', started_at: '2024-01-01 21:30', ended_at: '2024-01-01 21:45', start_station: 'Kingsbury St & Kinzie St', end_station: 'Clark St & Elm St', member_casual: 'member' },
+            { ride_id: 'A028', rideable_type: 'electric_bike', started_at: '2024-01-01 22:00', ended_at: '2024-01-01 22:20', start_station: 'Michigan Ave & Oak St', end_station: 'Navy Pier', member_casual: 'casual' },
+            { ride_id: 'A029', rideable_type: 'classic_bike', started_at: '2024-01-01 22:30', ended_at: '2024-01-01 22:50', start_station: 'Theater on the Lake', end_station: 'Millennium Park', member_casual: 'member' },
+            { ride_id: 'A030', rideable_type: 'electric_bike', started_at: '2024-01-01 23:00', ended_at: '2024-01-01 23:25', start_station: 'Clinton St & Madison St', end_station: 'DuSable Lake Shore Dr & North Blvd', member_casual: 'casual' },
+            { ride_id: 'A031', rideable_type: 'classic_bike', started_at: '2024-01-02 08:00', ended_at: '2024-01-02 08:15', start_station: 'Wells St & Concord Ln', end_station: 'DuSable Lake Shore Dr & Monroe St', member_casual: 'member' },
+            { ride_id: 'A032', rideable_type: 'electric_bike', started_at: '2024-01-02 08:30', ended_at: '2024-01-02 08:50', start_station: 'Millennium Park', end_station: 'Navy Pier', member_casual: 'casual' },
+            { ride_id: 'A033', rideable_type: 'classic_bike', started_at: '2024-01-02 09:00', ended_at: '2024-01-02 09:20', start_station: 'Clark St & Elm St', end_station: 'Kingsbury St & Kinzie St', member_casual: 'member' },
+            { ride_id: 'A034', rideable_type: 'electric_bike', started_at: '2024-01-02 09:30', ended_at: '2024-01-02 09:45', start_station: 'DuSable Lake Shore Dr & North Blvd', end_station: 'Theater on the Lake', member_casual: 'casual' },
+            { ride_id: 'A035', rideable_type: 'classic_bike', started_at: '2024-01-02 10:00', ended_at: '2024-01-02 10:15', start_station: 'Navy Pier', end_station: 'Michigan Ave & Oak St', member_casual: 'member' },
+            { ride_id: 'A036', rideable_type: 'electric_bike', started_at: '2024-01-02 10:30', ended_at: '2024-01-02 10:50', start_station: 'Clinton St & Washington Blvd', end_station: 'Wells St & Concord Ln', member_casual: 'casual' },
+            { ride_id: 'A037', rideable_type: 'classic_bike', started_at: '2024-01-02 11:00', ended_at: '2024-01-02 11:20', start_station: 'DuSable Lake Shore Dr & Monroe St', end_station: 'Millennium Park', member_casual: 'member' },
+            { ride_id: 'A038', rideable_type: 'electric_bike', started_at: '2024-01-02 11:30', ended_at: '2024-01-02 11:45', start_station: 'Kingsbury St & Kinzie St', end_station: 'Clark St & Elm St', member_casual: 'casual' },
+            { ride_id: 'A039', rideable_type: 'classic_bike', started_at: '2024-01-02 12:00', ended_at: '2024-01-02 12:15', start_station: 'Theater on the Lake', end_station: 'Clinton St & Madison St', member_casual: 'member' },
+            { ride_id: 'A040', rideable_type: 'electric_bike', started_at: '2024-01-02 12:30', ended_at: '2024-01-02 12:50', start_station: 'Michigan Ave & Oak St', end_station: 'Navy Pier', member_casual: 'casual' }
+        ];
+
+        // Populate first 40 rows table
+        function populateSampleTable() {
+            const headerRow = document.getElementById('headerRow');
+            const tableBody = document.getElementById('tableBody');
+            
+            const headers = ['ride_id', 'rideable_type', 'started_at', 'ended_at', 'start_station', 'end_station', 'member_casual'];
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+
+            sampleRows.forEach(row => {
+                const tr = document.createElement('tr');
+                headers.forEach(header => {
+                    const td = document.createElement('td');
+                    td.textContent = row[header];
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Populate station table with provided data
+        function populateStationTable() {
+            const tableBody = document.getElementById('stationTableBody');
+            
+            let totalCount = 0;
+            let totalAdjusted = 0;
+            
+            stationData.forEach(item => {
+                const tr = document.createElement('tr');
+                const td1 = document.createElement('td');
+                const td2 = document.createElement('td');
+                td1.textContent = item.station;
+                td2.textContent = item.count.toLocaleString();
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tableBody.appendChild(tr);
+                
+                totalCount += item.count;
+            });
+
+            // Add Grand Total row
+            const totalRow = document.createElement('tr');
+            const td1 = document.createElement('td');
+            const td2 = document.createElement('td');
+            td1.textContent = 'Grand Total';
+            td2.textContent = totalCount.toLocaleString();
+            totalRow.appendChild(td1);
+            totalRow.appendChild(td2);
+            tableBody.appendChild(totalRow);
+
+            // Generate bar chart
+            const labels = stationData.map(item => item.station);
+            const counts = stationData.map(item => item.adjusted);
+
+            new Chart(document.getElementById('stationBarGraph'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Adjusted Count",
+                        data: counts,
+                        backgroundColor: "#0066cc"
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scales: {
+                        x: { title: { display: true, text: "Count" } },
+                        y: { title: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Initialize on load
+        populateSampleTable();
+        populateStationTable();
+
+        // Pie chart with percentage labels (created after data is ready)
+        setTimeout(() => {
+            new Chart(document.getElementById('bikeTypePie'), {
+                type: 'pie',
+                data: {
+                    labels: ['Classic Bike (33.48%)', 'Electric Bike (66.52%)'],
+                    datasets: [{
+                        data: [33.48, 66.52],
+                        backgroundColor: ['#5cb85c', '#0066cc']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: false }
+                    }
+                }
+            });
+        }, 100);
+    </script>
+</body>
+</html>
